@@ -1,0 +1,6 @@
+# Building
+
+## Windows
+```
+make
+```

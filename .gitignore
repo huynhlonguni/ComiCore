@@ -1,0 +1,4 @@
+*.o
+*.log
+debug.txt
+gmon.out
