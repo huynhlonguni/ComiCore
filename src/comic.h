@@ -10,6 +10,10 @@ private:
 	vector<Page> pages;
 	int activePage = 0;
 
+	void normPage() {
+		if (activePage < 0) activePage = 0;
+		else if (activePage >= pages.size()) activePage = pages.size() - 1;
+	}
 public:
 	Comic() {
 		pages.push_back(Page(1000,1410));
@@ -24,17 +28,17 @@ public:
 	}
 
 	void update() {
-		if (activePage < pages.size())
-			pages[activePage].update();
+		normPage();
+		pages[activePage].update();
 	}
 
 	void draw() {
-		if (activePage < pages.size())
-			pages[activePage].draw();
+		normPage();
+		pages[activePage].draw();
 	}
 
-	void slice(Paths sliceLines) {
-		if (activePage < pages.size())
-			pages[activePage].slice(sliceLines);
+	Page* getActivePage() {
+		normPage();
+		return &pages[activePage];
 	}
 };

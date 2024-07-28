@@ -33,10 +33,15 @@ public:
 
 	enum Params { Thickness, Tolerance };
 
-	bool handleInput() {
+	bool handleInput(InputManager *input) {
 		bool res = false;
 
-		Point mouse = {GetMouseX(), GetMouseY()};
+		if (input->isPressed(InputManager::Keyboard, KEY_ESCAPE, true)) {
+			reset();
+			return true;
+		}
+
+		Point mouse = {input->getMouseX(true), input->getMouseY(true)};
 		if (started()) {
 			Point firstPoint = sliceLines[0][0];
 			if (abs(mouse.x - firstPoint.x) < tolerance && abs(mouse.y - firstPoint.y) < tolerance) 
@@ -45,19 +50,19 @@ public:
 			sliceLines[0].back() = mouse;
 		}
 
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+		if (input->isPressed(InputManager::Mouse, MOUSE_BUTTON_LEFT, true)) {
 			sliceLines[0].back() = mouse;
 			sliceLines[0].push_back(mouse);
 			res = true;
 		}
 
-		if (GetGestureDetected() == GESTURE_DOUBLETAP || isClosedPath()) {
+		if (input->getGesture(true) == GESTURE_DOUBLETAP || isClosedPath()) {
 			if (started(2)) //prevent empty point on double click
 				commit();
 			reset();
 			res = true;
 		}
-		
+
 		return res;
 	}
 
@@ -91,8 +96,9 @@ public:
 	}
 
 	void commit() {
-		if (comic) 
-			comic->slice(inflatedSlices);
+		if (comic) {
+			comic->getActivePage()->slice(inflatedSlices);
+		}
 	}
 
 	void draw() {

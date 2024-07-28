@@ -31,7 +31,6 @@ public:
 	Page() {}
 	Page(int width, int height) : width(width), height(height) {
 		panels.push_back(getDefaultPanelPaths(width, height));
-		panels.push_back(getDefaultPanelPaths(width, height, 0, 500));
 	}
 
 	void update() {
@@ -49,35 +48,26 @@ public:
 		double time = GetTime();
 		vector<Panel> res;
 
-		Paths subject;
-		subject.reserve(panels.size());
-
 		for (Panel &panel : panels) {
-			Paths p = panel.getPaths();
-			subject.insert(subject.end(), p.begin(), p.end());
-		}
-
-		Paths solution = Clipper::Difference(subject, sliceLines, Clipper::FillRule::NonZero);
-
-		Paths panelPaths;
-		for (const Path &p : solution) {
-			if (Clipper::IsPositive(p)) {
-				if (panelPaths.size()) {
-					res.push_back(panelPaths); //flush previous panel
+			Paths solution = Clipper::Difference(panel.getPaths(), sliceLines, Clipper::FillRule::NonZero);
+			Paths panelPaths;
+			for (const Path &p : solution) {
+				if (Clipper::IsPositive(p)) {
+					if (panelPaths.size()) {
+						res.push_back(panelPaths); //flush previous panel
+					}
+					panelPaths.clear();
+					panelPaths.push_back({p});
 				}
-				panelPaths.clear();
-				panelPaths.push_back({p});
+				else {
+					panelPaths.push_back({p}); //push hole to unflushed panel
+				}
 			}
-			else {
-				panelPaths.push_back({p}); //push hole to unflushed panel
+			if (panelPaths.size()) { //flush all
+				res.push_back(panelPaths);
 			}
-		}
-		if (panelPaths.size()) { //flush all
-			res.push_back(panelPaths);
 		}
 
-		cout << "Size: " << res.size() << endl;
-		cout << "Execution: " << (GetTime() - time) * 1000 << endl;
 		panels = res;
 	}
 };

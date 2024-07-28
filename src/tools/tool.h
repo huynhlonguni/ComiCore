@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../comic.h"
+#include "../input_manager.h"
 
 class Tool {
 protected:
@@ -10,7 +11,7 @@ public:
 		this->comic = comic;
 	}
 
-	virtual bool handleInput() = 0;
+	virtual bool handleInput(InputManager *input) = 0;
 
 	virtual void setParam(int id, void *value) = 0;
 

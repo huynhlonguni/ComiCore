@@ -4,10 +4,7 @@
 #include "tools/tool.h"
 #include "tools/slice.h"
 #include "ui.h"
-
-#define MAX_ZOOM 30
-#define MIN_ZOOM 0.1
-#define ZOOM_SCALE 0.1
+#include "input_manager.h"
 
 #include <vector>
 using namespace std;
@@ -23,7 +20,12 @@ private:
 
 	Camera2D camera = {.zoom = 1};
 	float zoomStops = 0.0;
+	const float zoomScale = 0.1;
+	const float minZoom = 0.1;
+	const float maxZoom = 4;
 	Vector2 inputDown;
+
+	InputManager input;
 
 	int handleWheel() {
 		if (GetMouseWheelMove() != 0) {
@@ -31,13 +33,13 @@ private:
 			zoomStops += GetMouseWheelMove() > 0 ? zoomDelta : -zoomDelta;
 			Vector2 mouse = GetMousePosition();
 			Vector2 preZoom = GetScreenToWorld2D(mouse, camera);
-			camera.zoom = exp(zoomStops * ZOOM_SCALE);
-			if (camera.zoom > MAX_ZOOM) {
-				camera.zoom = MAX_ZOOM;
+			camera.zoom = exp(zoomStops * zoomScale);
+			if (camera.zoom > maxZoom) {
+				camera.zoom = maxZoom;
 				zoomStops -= zoomDelta;
 			}
-			else if (camera.zoom < MIN_ZOOM) {
-				camera.zoom = MIN_ZOOM;
+			else if (camera.zoom < minZoom) {
+				camera.zoom = minZoom;
 				zoomStops += zoomDelta;
 			}
 			Vector2 postZoom = GetWorldToScreen2D(preZoom, camera);
@@ -70,10 +72,11 @@ public:
 	}
 
 	void update() {
+		input.update(camera);
 		int wheel = handleWheel();
 		int gestures = handleGestures();
 
-		sliceTool.handleInput();
+		sliceTool.handleInput(&input);
 		sliceTool.update();
 
 		if (usesUI)
