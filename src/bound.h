@@ -1,9 +1,8 @@
 #pragma once
 
-#include "primitives/point.h"
+#include "path.h"
 
 #include <vector>
-#include <iostream>
 using namespace std;
 
 class Bound {
@@ -41,23 +40,20 @@ public:
 		return {minx, miny, maxx - minx, maxy - miny};
 	}
 
-	static Bound fromPoints(vector<Point> pnts) {
-		return fromPoints(pnts.data(), pnts.size());
+	static Bound fromPoints(Path path) {
+		return fromPoints(path.data(), path.size());
 	}
 
 	static bool intersect(Bound b1, Bound b2) {
 		if (b1.w == 0 || b1.h == 0 || b2.w == 0 || b2.h == 0) {
-			cout << "Area 0\n";
 			return false;
 		}
 
 		if (b2.x > b1.x + b1.w || b1.x > b2.x + b2.w) {
-			cout << "Side 0\n";
 			return false;
 		}
 
 		if (b2.y > b1.y + b1.h || b1.y > b2.y + b2.h) {
-			cout << "Side 1\n";
 			return false;
 		}
 

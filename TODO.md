@@ -1,6 +1,6 @@
 [ ] Join edges
 [ ] Move edges
-[ ] Triangulate to draw panel
+[x] Triangulate to draw panel
 [ ] Stencil to mask Image
 [ ] Text
 [ ] Bubble Renderer

@@ -1,26 +1,19 @@
-#include "ui.h"
 #include "raylib.h"
-#include "raymath.h"
 
-#define MAX_ZOOM 30
-#define MIN_ZOOM 0.1
-#define ZOOM_SCALE 0.1
-#include <math.h>
+#include "editor.h"
 
-#include "page.h"
+#if defined(PLATFORM_WEB)
+	#include <emscripten/emscripten.h>
+#endif
 
-Page page;
-UI ui(20);
+Editor editor;
 
 void UpdateFrame() {
-	ui.update();
-
-	page.update();
+	editor.update();
 
 	BeginDrawing();
 		ClearBackground(GRAY);
-		page.draw();
-		ui.draw();
+		editor.draw();
 		DrawFPS(10,10);
 
 	EndDrawing();
@@ -30,20 +23,15 @@ int main() {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
 	SetTargetFPS(60);
 	InitWindow(1280, 720, "raylib-nuklear example");
+	SetExitKey(0);
 
-	page = Page(1000,1410);
-
-	vector<Point> cutLine(3);
-	cutLine[0] = {-20.0, 700};
-	cutLine[1] = {500.0, 900};
-	cutLine[2] = {1020.0, 700};
-
-	page.slice(cutLine);
-
+#if defined(PLATFORM_WEB)
+	emscripten_set_main_loop(UpdateFrame, 0, 1);
+#else
 	while (!WindowShouldClose()) {
 		UpdateFrame();
 	}
-
+#endif
 
 	CloseWindow();
 	return 0;

@@ -60,7 +60,7 @@ public:
 		return LINE_NO_INTERSECT;
 	}
 
-	static vector<Panel> split(Panel panel, vector<Point> split) {
+	static vector<Panel> split(Panel panel, Path split) {
 		// vector<Line> edges = panel.getPolygon().getEdges();
 
 		Clipper2Lib::PathsD subject, solution;

@@ -9,9 +9,8 @@ SRC_DIR = src
 INCLUDE_DIR = include
 
 CLIPPER_SOURCE = $(wildcard clipper2/*.cpp)
-POLYPARTITION_SOURCE = $(wildcard polypartition/*.cpp)
 
-DEPENDENCY = $(CLIPPER_SOURCE) $(POLYPARTITION_SOURCE)
+DEPENDENCY = $(CLIPPER_SOURCE)
 
 DESKTOP_FLAGS = -Wno-multichar -lopengl32 -lgdi32 -lwinmm
 DESKTOP_NO_CONSOLE = -mwindows
