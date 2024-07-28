@@ -36,8 +36,6 @@ public:
 	};
 
 	void updateMouse(Camera2D camera) {
-		const int mOff = MAX_KEYBOARD_KEYS;
-
 		for (int i = 0; i < MAX_MOUSE_BUTTONS; i++)
 			currentKeyState[MAX_KEYBOARD_KEYS + i] = IsMouseButtonDown(i);
 

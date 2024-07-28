@@ -45,7 +45,6 @@ public:
 	}
 
 	void slice(Paths sliceLines) {
-		double time = GetTime();
 		vector<Panel> res;
 
 		for (Panel &panel : panels) {
