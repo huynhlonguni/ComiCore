@@ -2,3 +2,4 @@
 *.log
 debug.txt
 gmon.out
+web/node_modules
