@@ -1,21 +1,28 @@
 import { useEffect } from "react";
 import Module from "../editor"
 
-const Canvas = () => {
+const Canvas = ({className}) => {
 	const loadWASM = async () => {
-        let editor = await Module({
-			canvas: document.getElementById('canvas')
-		});
-     }
+        const canvas = document.getElementById("canvas");
+        window.editor = await Module({
+            canvas: canvas
+        });
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        window.addEventListener ("resize", function (e) {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }, true);
+    }
 
     useEffect(() => {
         loadWASM();
     }, []);
 
     return (
-        <div className="w-full bg-gray-500">
-            <canvas id="canvas" onContextMenu={ (event) => event.preventDefault() } tabIndex="-1"/>            
-        </div>
+        <canvas className={className} id="canvas"
+                onContextMenu={ (event) => event.preventDefault() } tabIndex="-1"
+        />         
     );
 };
 

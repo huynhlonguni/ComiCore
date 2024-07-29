@@ -1593,6 +1593,8 @@ static EM_BOOL EmscriptenResizeCallback(int eventType, const EmscriptenUiEvent *
     int width = GetWindowInnerWidth();
     int height = GetWindowInnerHeight();
 
+    emscripten_get_canvas_element_size("#canvas", &width, &height);
+
     if (width < CORE.Window.screenMin.width) width = CORE.Window.screenMin.width;
     else if (width > CORE.Window.screenMax.width && CORE.Window.screenMax.width > 0) width = CORE.Window.screenMax.width;
 

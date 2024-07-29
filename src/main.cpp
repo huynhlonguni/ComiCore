@@ -2,7 +2,7 @@
 
 #include "editor.h"
 
-#if defined(PLATFORM_WEB)
+#ifdef __EMSCRIPTEN__
 	#include <emscripten/emscripten.h>
 #endif
 
@@ -25,7 +25,7 @@ int main() {
 	InitWindow(1280, 720, "raylib-nuklear example");
 	SetExitKey(0);
 
-#if defined(PLATFORM_WEB)
+#ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(UpdateFrame, 0, 1);
 #else
 	while (!WindowShouldClose()) {
