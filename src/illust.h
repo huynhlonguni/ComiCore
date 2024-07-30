@@ -12,7 +12,7 @@ private:
 	int x = 0;
 	int y = 0;
 	float scale = 1.0;
-	int parentPanel = -1;
+	int parentPanel = 0;
 public:
 	Illust(Image image) {
 		texture = LoadTextureFromImage(image);

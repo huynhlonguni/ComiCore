@@ -45,8 +45,8 @@ public:
 				pnt[2] = {bound.x + bound.w, bound.y + bound.h};
 				pnt[3] = {bound.x + bound.w, bound.y};
 				for (int i = 0; i < 4; i++) {
-					Bound bnd = {pnt[i].x - controlSize / 2,
-								pnt[i].y - controlSize / 2,
+					Bound bnd = {(int)(pnt[i].x - controlSize / 2),
+								(int)(pnt[i].y - controlSize / 2),
 								controlSize, controlSize};
 					if (Bound::inside(bnd, mouse)) {
 						hasAnchor = true;
@@ -56,9 +56,15 @@ public:
 						return true;
 					}
 				}
-				hasAnchor = false;
-				previousMouse = mouse;
-				return true;
+				if (Bound::inside(bound, mouse)) {
+					hasAnchor = false;
+					previousMouse = mouse;
+					return true;
+				}
+				else {
+					workIllust = NULL;
+					return true;
+				}
 			}
 			else {
 				for (Illust *illust: page->getIllusts()) {
@@ -118,6 +124,8 @@ public:
 			previousMouse = mouse;
 			return true;
 		}
+
+		return false;
 	}
 
 	void setParam(int id, void *value) {

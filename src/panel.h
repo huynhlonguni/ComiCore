@@ -61,14 +61,16 @@ public:
 		return paths;
 	}
 
-	void draw(Color color = BLACK) {
+	void drawMask() {
 		for (int i = 0; i < triangles.size(); i += 3) {
 			Point p3 = vertices[triangles[i + 0]];
 			Point p2 = vertices[triangles[i + 1]];
 			Point p1 = vertices[triangles[i + 2]];
 			DrawTriangle({(float)p1.x, (float)p1.y}, {(float)p2.x, (float)p2.y}, {(float)p3.x, (float)p3.y}, {128, 128, 128, 128});
 		}
+	}
 
+	void draw(Color color = BLACK) {
 		Renderer::draw(paths, true, color);
 	}
 };

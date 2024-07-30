@@ -4,6 +4,7 @@
 #include "panel.h"
 #include "bound.h"
 #include "raylib.h"
+#include "rlgl.h"
 #include "raymath.h"
 #include "illust.h"
 
@@ -44,17 +45,41 @@ public:
 
 	void draw() {
 		DrawRectangle(0, 0, width, height, WHITE);
+		rlDrawRenderBatchActive(); //flush
 
 		vector<char> drawFlags(illusts.size(), 0);
 
 		for (int i = 0; i < panels.size(); i++) {
-			panels[i].draw();
+			rlEnableStencilTest();
+			bool doDraw = false;
+
+			//Draw stencil mask
+			rlStencilFunc(RL_ALWAYS, 1, 0xFF);
+			rlStencilOp(RL_REPLACE, RL_REPLACE, RL_REPLACE);
+
+			rlColorMask(0,0,0,0);
+			panels[i].drawMask();
+			rlColorMask(1,1,1,1);
+
+			rlDrawRenderBatchActive(); //flush
+
+			//Test stencil
+			rlStencilFunc(RL_EQUAL, 1, 0xFF);
+			rlStencilOp(RL_KEEP, RL_KEEP, RL_KEEP);
 			for (int j = 0; j < illusts.size(); j++) {
 				if (illusts[j]->getParentPanel() == i) {
 					drawFlags[j] = true;
+					doDraw = true;
 					illusts[j]->draw();
 				}
 			}
+
+			if (doDraw) rlDrawRenderBatchActive();
+
+			rlDisableStencilTest();
+
+			panels[i].draw();
+
 		}
 
 		for (int k = 0; k < illusts.size(); k++) {
