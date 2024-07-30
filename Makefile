@@ -20,7 +20,7 @@ WASM_FLAGS = -std=c++17 -s -Wall -Wno-missing-braces -Wno-multichar \
 			-s USE_GLFW=3 -sALLOW_MEMORY_GROWTH -s TOTAL_MEMORY=67108864 \
 			-s EXPORTED_RUNTIME_METHODS=ccall,cwrap \
 			-D PLATFORM_WEB -s ENVIRONMENT=web -s MODULARIZE=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=1
-WASM_DATA = 
+WASM_DATA = --embed-file fonts/ComicSansMS3.ttf
 WASM_MAIN = src/main.cpp
 
 raylib_desktop:
@@ -33,4 +33,4 @@ main:
 	$(CXX) $(DESKTOP_MAIN) $(ADDITIONAL_CPP) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylib -I$(INCLUDE_DIR) $(DESKTOP_FLAGS)
 	a.exe
 wasm:
-	emcc -O3 -g0 $(WASM_MAIN) $(ADDITIONAL_CPP) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylibwasm -I$(INCLUDE_DIR) -o web/src/editor.mjs $(WASM_FLAGS)
+	emcc -O3 -g0 $(WASM_MAIN) $(ADDITIONAL_CPP) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylibwasm -I$(INCLUDE_DIR) -o web/src/editor.mjs $(WASM_FLAGS) $(WASM_DATA)

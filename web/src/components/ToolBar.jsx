@@ -13,6 +13,7 @@ const ToolBar = () => {
 	return(
 		<div className="w-full h-12 bg-zinc-800 border border-zinc-700 flex">
 			<ToolButton icon={faHouse} className="" onClick={() => {
+				setActive(-2);
 				// alert("Go Home");
 			}}/>
 			<ToolButton icon={faHand} isActive={active == -1} onClick={() => {
