@@ -34,6 +34,8 @@ private:
 
 	// Color color;
 
+	int thickness = 1;
+
 	vector<unsigned short> triangles;
 	Path vertices;
 public:
@@ -70,7 +72,21 @@ public:
 		}
 	}
 
+	void drawLine(Point a, Point b, Color color = BLACK) {
+		Vector2 start = {(float)a.x, (float)a.y};
+		Vector2 end = {(float)b.x, (float)b.y};
+		// DrawRectangleV({start.x - thickness / 2, start.y - thickness / 2}, {thickness, thickness}, color);
+		// DrawRectangleV({end.x - thickness / 2, end.y - thickness / 2}, {thickness, thickness}, color);
+		DrawLineEx(start, end, thickness, color);
+	}
+
 	void draw(Color color = BLACK) {
+		for (Path &p: paths) {
+			for (int i = 0; i < p.size() - 1; i++) {
+				drawLine(p[i], p[i + 1], color);
+			}
+			drawLine(p[p.size() - 1], p[0], color);
+		}
 		Renderer::draw(paths, true, color);
 	}
 };

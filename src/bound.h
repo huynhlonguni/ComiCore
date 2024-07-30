@@ -44,6 +44,12 @@ public:
 		return fromPoints(path.data(), path.size());
 	}
 
+	static Rect getRectFromBound(Bound bound) {
+		return {
+			bound.x, bound.y, bound.x + bound.w, bound.y + bound.h
+		};
+	}
+
 	static bool intersect(Bound b1, Bound b2) {
 		if (b1.w == 0 || b1.h == 0 || b2.w == 0 || b2.h == 0) {
 			return false;

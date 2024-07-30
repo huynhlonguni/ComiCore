@@ -3,6 +3,6 @@
 [x] Stencil to mask Image
 [ ] Text
 [ ] Bubble Renderer
-[ ] Proper outline thickness
+[x] Proper outline thickness
 [ ] File format
 [ ] Undo Redo

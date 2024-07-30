@@ -45,11 +45,11 @@ public:
 
 	void draw() {
 		DrawRectangle(0, 0, width, height, WHITE);
-		rlDrawRenderBatchActive(); //flush
-
+		
 		vector<char> drawFlags(illusts.size(), 0);
 
 		for (int i = 0; i < panels.size(); i++) {
+			rlDrawRenderBatchActive();
 			rlEnableStencilTest();
 			bool doDraw = false;
 
@@ -59,9 +59,9 @@ public:
 
 			rlColorMask(0,0,0,0);
 			panels[i].drawMask();
-			rlColorMask(1,1,1,1);
 
 			rlDrawRenderBatchActive(); //flush
+			rlColorMask(1,1,1,1);
 
 			//Test stencil
 			rlStencilFunc(RL_EQUAL, 1, 0xFF);
@@ -77,6 +77,7 @@ public:
 			if (doDraw) rlDrawRenderBatchActive();
 
 			rlDisableStencilTest();
+			rlClearStencilBuffer();
 
 			panels[i].draw();
 
@@ -90,13 +91,24 @@ public:
 	void slice(Paths sliceLines) {
 		vector<Panel> res;
 
-		for (Panel &panel : panels) {
-			Paths solution = Clipper::Difference(panel.getPaths(), sliceLines, Clipper::FillRule::NonZero);
+		vector<vector<Illust*>> panelIllust(panels.size());
+
+		for (int i = 0; i < panels.size(); i++) {
+			for (int j = 0; j < illusts.size(); j++) {
+				if (illusts[j]->getParentPanel() == i)
+					panelIllust[i].push_back(illusts[j]);
+			}
+		}
+
+		for (int i = 0; i < panels.size(); i++) {
+			Paths solution = Clipper::Difference(panels[i].getPaths(), sliceLines, Clipper::FillRule::NonZero);
 			Paths panelPaths;
+			int count = 0;
 			for (const Path &p : solution) {
 				if (Clipper::IsPositive(p)) {
 					if (panelPaths.size()) {
 						res.push_back(panelPaths); //flush previous panel
+						count++;
 					}
 					panelPaths.clear();
 					panelPaths.push_back({p});
@@ -107,6 +119,24 @@ public:
 			}
 			if (panelPaths.size()) { //flush all
 				res.push_back(panelPaths);
+				count++;
+			}
+
+			for (int k = 0; k < panelIllust[i].size(); k++) {
+				double prevArea = 0;
+				for (int j = res.size() - count; j < res.size(); j++) {
+					double area = 0;
+					Bound illustBound = panelIllust[i][k]->getBound();
+					Rect illustRect = Bound::getRectFromBound(illustBound);
+					Paths sol = Clipper::RectClip(illustRect, res[j].getPaths());
+					for (const Path &p: sol)
+						area += Clipper::Area(p);
+
+					if (area >= prevArea) {
+						prevArea = area;
+						panelIllust[i][k]->setParentPanel(j);
+					}
+				}
 			}
 		}
 
