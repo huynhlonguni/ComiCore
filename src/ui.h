@@ -37,6 +37,9 @@ public:
 			if (nk_button_label(ctx, "Bubble")) {
 				activeTool = 3;
 			}
+			if (nk_button_label(ctx, "Text")) {
+				activeTool = 4;
+			}
 		}
 		nk_end(ctx);
 	}

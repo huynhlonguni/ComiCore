@@ -115,7 +115,7 @@ public:
 		}
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 		Renderer::draw(sliceLines[0], false, BLACK);
 		Renderer::draw(inflatedSlices, true, BLUE);
 	}

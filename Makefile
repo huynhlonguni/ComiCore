@@ -15,6 +15,7 @@ DEPENDENCY = $(CLIPPER_SOURCE)
 DESKTOP_FLAGS = -Wno-multichar -lopengl32 -lgdi32 -lwinmm
 DESKTOP_NO_CONSOLE = -mwindows
 DESKTOP_MAIN = src/main.cpp
+ADDITIONAL_CPP = src/text_engine.cpp
 WASM_FLAGS = -std=c++17 -s -Wall -Wno-missing-braces -Wno-multichar \
 			-s USE_GLFW=3 -sALLOW_MEMORY_GROWTH -s TOTAL_MEMORY=67108864 \
 			-s EXPORTED_RUNTIME_METHODS=ccall,cwrap \
@@ -29,7 +30,7 @@ raylib_wasm:
 	$(MAKE) -C $(RAYLIB_DIR) PLATFORM=PLATFORM_WEB -B
 
 main:
-	$(CXX) $(DESKTOP_MAIN) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylib -I$(INCLUDE_DIR) $(DESKTOP_FLAGS)
+	$(CXX) $(DESKTOP_MAIN) $(ADDITIONAL_CPP) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylib -I$(INCLUDE_DIR) $(DESKTOP_FLAGS)
 	a.exe
 wasm:
-	emcc -O3 -g0 $(WASM_MAIN) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylibwasm -I$(INCLUDE_DIR) -o web/src/editor.js $(WASM_FLAGS)
+	emcc -O3 -g0 $(WASM_MAIN) $(ADDITIONAL_CPP) $(DEPENDENCY) -I$(RAYLIB_DIR) -L$(RAYLIB_DIR) -lraylibwasm -I$(INCLUDE_DIR) -o web/src/editor.js $(WASM_FLAGS)

@@ -10,6 +10,10 @@ class Illust : public Attachment {
 private:
 	Texture2D texture;
 public:
+	int getType() {
+		return Attachment::Illust;
+	}
+
 	Illust(Image image) {
 		texture = LoadTextureFromImage(image);
 		bound.x = 0;
@@ -38,7 +42,7 @@ public:
 		return texture.width / (float)texture.height;
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 	    Rectangle source = { 0, 0, (float)texture.width, (float)texture.height };
 	    Rectangle dest = { (float)bound.x, (float)bound.y, (float)bound.w, (float)bound.h };
 	    Vector2 origin = { 0, 0 };

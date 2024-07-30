@@ -21,6 +21,8 @@ private:
 public:
 	Comic() {
 		pages.push_back(Page(1000,1410));
+		Text tx;
+		addText(tx);
 	}
 
 	void loadFromMemory(unsigned char *data) {
@@ -41,14 +43,19 @@ public:
 		pages[activePage].addBubble(bubble);
 	}
 
+	void addText(Text text) {
+		normPage();
+		pages[activePage].addText(text);
+	}
+
 	void update() {
 		normPage();
 		pages[activePage].update();
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 		normPage();
-		pages[activePage].draw();
+		pages[activePage].draw(textEngine);
 	}
 
 	Page* getActivePage() {

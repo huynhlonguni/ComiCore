@@ -172,7 +172,7 @@ public:
 		}
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 		if (!workAttachment) return;
 
 		const int size = controlSize;

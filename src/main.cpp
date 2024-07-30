@@ -35,6 +35,8 @@ int main() {
 	InitWindow(1280, 720, "ComicGen");
 	SetExitKey(0);
 
+	editor.init();
+
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(UpdateFrame, 0, 1);
 #else

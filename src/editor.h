@@ -6,7 +6,9 @@
 #include "tools/panel.h"
 #include "tools/transform.h"
 #include "tools/bubble.h"
+#include "tools/text.h"
 #include "input_manager.h"
+#include "text_engine.h"
 
 #ifndef __EMSCRIPTEN__
 	#include "ui.h"
@@ -33,6 +35,7 @@ private:
 	Vector2 inputDown;
 
 	InputManager input;
+	TextEngine text;
 
 	int handleWheel() {
 		if (GetMouseWheelMove() != 0) {
@@ -79,9 +82,15 @@ public:
 		tools.push_back(new PanelTool());
 		tools.push_back(new TransformTool());
 		tools.push_back(new BubbleTool());
+		tools.push_back(new TextTool());
 
 		for (int i = 0; i < tools.size(); i++)
 			tools[i]->setTarget(&comic);
+	}
+
+	void init() {
+		text.init();
+		text.loadFont("ComicSans", "fonts/ComicSansMS3.ttf");
 	}
 
 	void addIllust(char *path) {
@@ -113,10 +122,10 @@ public:
 
 	void draw() {
 		BeginMode2D(camera);
-			comic.draw();
+			comic.draw(&text);
 
 			if (activeTool > -1 && activeTool < tools.size()) {
-				tools[activeTool]->draw();
+				tools[activeTool]->draw(&text);
 			}
 		EndMode2D();
 

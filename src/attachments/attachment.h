@@ -1,12 +1,19 @@
 #pragma once
 
 #include "../bound.h"
+#include "../text_engine.h"
 
 class Attachment {
 protected:
 	Bound bound;
 	int parentPanel = -1;
 public:
+	enum {
+		Illust, Bubble, Text
+	};
+	
+	virtual int getType() = 0;
+
 	virtual Bound getBound() {
 		return bound;
 	}
@@ -37,5 +44,5 @@ public:
 		return bound.w / (float)bound.h;
 	}
 
-	virtual void draw() = 0;
+	virtual void draw(TextEngine *textEngine) = 0;
 };

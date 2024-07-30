@@ -9,6 +9,7 @@
 #include "attachments/attachment.h"
 #include "attachments/illust.h"
 #include "attachments/bubble.h"
+#include "attachments/text.h"
 
 #include <vector>
 #include <iostream>
@@ -45,7 +46,7 @@ public:
 	void update() {
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 		DrawRectangle(0, 0, width, height, WHITE);
 		
 		vector<char> drawFlags(attachments.size(), 0);
@@ -72,7 +73,7 @@ public:
 				if (attachments[j]->getParentPanel() == i) {
 					drawFlags[j] = true;
 					doDraw = true;
-					attachments[j]->draw();
+					attachments[j]->draw(textEngine);
 				}
 			}
 
@@ -86,7 +87,7 @@ public:
 		}
 
 		for (int k = 0; k < attachments.size(); k++) {
-			if (!drawFlags[k]) attachments[k]->draw();
+			if (!drawFlags[k]) attachments[k]->draw(textEngine);
 		}
 	}
 
@@ -151,6 +152,10 @@ public:
 
 	void addBubble(Bubble bubble) {
 		attachments.push_back(new Bubble(bubble));
+	}
+
+	void addText(Text text) {
+		attachments.push_back(new Text(text));
 	}
 
 	vector<Attachment*> getAttachments() {

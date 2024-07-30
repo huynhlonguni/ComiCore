@@ -8,6 +8,10 @@ private:
 	int padding = 10;
 	float angle = 135.0; 
 public:
+	int getType() {
+		return Attachment::Bubble;
+	}
+	
 	void DrawEllipseLinesEx(int cx, int cy, float rh, float rv, float thick, Color color) {
 		const int off = 1;
 		for (int i = 0; i < 360; i += off) {
@@ -17,7 +21,7 @@ public:
 		}
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 		Bound bound = this->getBound();
 
 		int cx = bound.x + bound.w / 2;

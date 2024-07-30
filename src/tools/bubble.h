@@ -101,7 +101,7 @@ public:
 		}
 	}
 
-	void draw() {
+	void draw(TextEngine *textEngine) {
 		if (!started) return;
 
 		const int size = controlSize;
@@ -123,7 +123,7 @@ public:
 			DrawRectangle(pnt[i].x - size / 2 + line, pnt[i].y - size / 2 + line, size - line * 2, size - line * 2, WHITE);
 		}
 
-		bubble.draw();
+		bubble.draw(NULL);
 	}
 
 	~BubbleTool() {

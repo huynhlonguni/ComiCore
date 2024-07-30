@@ -21,7 +21,7 @@ public:
 
 	virtual void commit() = 0;
 
-	virtual void draw() = 0;
+	virtual void draw(TextEngine *textEngine) = 0;
 
 	virtual ~Tool() {}
 };
