@@ -21,8 +21,6 @@ private:
 public:
 	Comic() {
 		pages.push_back(Page(1000,1410));
-		Text tx;
-		addText(tx);
 	}
 
 	void loadFromMemory(unsigned char *data) {
@@ -31,6 +29,35 @@ public:
 
 	void writeToMemory(unsigned char *data, unsigned long long *size) {
 
+	}
+
+	void addPage() {
+		pages.push_back(Page(1000,1410));
+	}
+
+	void setActivePage(int id) {
+		if (id >= 0 && id <= pages.size())
+		activePage = id;
+	}
+
+	int getAttachmentCount() {
+		normPage();
+		return pages[activePage].getAttachmentCount();
+	}
+
+	int getAttachmentPanel(int id) {
+		normPage();
+		pages[activePage].getAttachmentPanel(id);
+	}
+
+	int getAttachmentType(int id) {
+		normPage();
+		pages[activePage].getAttachmentType(id);
+	}
+
+	void setAttachmentPanel(int id, int panel) {
+		normPage();
+		pages[activePage].setAttachmentPanel(id, panel);
 	}
 
 	void addIllust(Image img) {

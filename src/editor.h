@@ -77,7 +77,11 @@ private:
 		return currentGesture;
 	}
 public:
-	Editor() : ui(20) {
+	Editor()
+#ifndef __EMSCRIPTEN__
+	: ui(20)
+#endif
+	{
 		tools.push_back(new SliceTool());
 		tools.push_back(new PanelTool());
 		tools.push_back(new TransformTool());
@@ -91,6 +95,30 @@ public:
 	void init() {
 		text.init();
 		text.loadFont("ComicSans", "fonts/ComicSansMS3.ttf");
+	}
+
+	void addPage() {
+		comic.addPage();
+	}
+
+	void setActivePage(int id) {
+		comic.setActivePage(id);
+	}
+
+	int getAttachmentCount() {
+		return comic.getAttachmentCount();
+	}
+
+	int getAttachmentPanel(int id) {
+		return comic.getAttachmentPanel(id);
+	}
+
+	int getAttachmentType(int id) {
+		return comic.getAttachmentType(id);
+	}
+
+	void setAttachmentPanel(int id, int panel) {
+		comic.setAttachmentPanel(id, panel);
 	}
 
 	void addIllust(char *path) {

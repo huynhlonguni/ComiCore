@@ -158,6 +158,25 @@ public:
 		attachments.push_back(new Text(text));
 	}
 
+	int getAttachmentCount() {
+		return attachments.size();
+	}
+
+	int getAttachmentPanel(int id) {
+		if (id >= 0 && id <= attachments.size())
+			return attachments[id]->getParentPanel();
+	}
+
+	int getAttachmentType(int id) {
+		if (id >= 0 && id <= attachments.size())
+			return attachments[id]->getType();
+	}
+
+	void setAttachmentPanel(int id, int panel) {
+		if (id >= 0 && id <= attachments.size())
+			return attachments[id]->setParentPanel(panel);
+	}
+
 	vector<Attachment*> getAttachments() {
 		return attachments;
 	}

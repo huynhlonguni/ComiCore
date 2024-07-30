@@ -6,7 +6,7 @@
 class Attachment {
 protected:
 	Bound bound;
-	int parentPanel = -1;
+	int parentPanel = 0;
 public:
 	enum {
 		Illust, Bubble, Text
@@ -45,4 +45,8 @@ public:
 	}
 
 	virtual void draw(TextEngine *textEngine) = 0;
+
+	virtual ~Attachment() {
+		
+	}
 };

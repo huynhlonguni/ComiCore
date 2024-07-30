@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Module from "../editor"
+import Module from "../editor.mjs"
 
 const Canvas = ({className}) => {
 	const loadWASM = async () => {

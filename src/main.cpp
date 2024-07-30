@@ -8,6 +8,39 @@
 
 Editor editor;
 
+#ifdef __EMSCRIPTEN__
+extern "C" { //name mangling
+	EMSCRIPTEN_KEEPALIVE void EditorAddPage() {
+		editor.addPage();
+	}
+
+	EMSCRIPTEN_KEEPALIVE void EditorSetActivePage(int id) {
+		editor.setActivePage(id);
+	}
+
+	EMSCRIPTEN_KEEPALIVE void EditorSetActiveTool(int id) {
+		editor.setActiveTool(id);
+	}
+
+	EMSCRIPTEN_KEEPALIVE int EditorGetAttachmentCount() {
+		return editor.getAttachmentCount();
+	}
+
+	EMSCRIPTEN_KEEPALIVE int EditorGetAttachmentPanel(int id) {
+		return editor.getAttachmentPanel(id);
+	}
+
+	EMSCRIPTEN_KEEPALIVE int EditorGetAttachmentType(int id) {
+		return editor.getAttachmentType(id);
+	}
+
+	EMSCRIPTEN_KEEPALIVE void EditorSetAttachmentPanel(int id, int panel) {
+		return editor.setAttachmentPanel(id, panel);
+	}
+}
+#endif
+
+
 void UpdateFrame() {
 	editor.update();
 
@@ -24,7 +57,9 @@ void UpdateFrame() {
 	BeginDrawing();
 		ClearBackground(GRAY);
 		editor.draw();
+#ifndef __EMSCRIPTEN__
 		DrawFPS(10,10);
+#endif
 
 	EndDrawing();
 }
