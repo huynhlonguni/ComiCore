@@ -5,6 +5,7 @@
 #include "tools/slice.h"
 #include "tools/panel.h"
 #include "tools/transform.h"
+#include "tools/bubble.h"
 #include "input_manager.h"
 
 #ifndef __EMSCRIPTEN__
@@ -77,6 +78,7 @@ public:
 		tools.push_back(new SliceTool());
 		tools.push_back(new PanelTool());
 		tools.push_back(new TransformTool());
+		tools.push_back(new BubbleTool());
 
 		for (int i = 0; i < tools.size(); i++)
 			tools[i]->setTarget(&comic);

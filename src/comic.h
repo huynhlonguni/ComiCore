@@ -1,6 +1,7 @@
 #pragma once
 
 #include "page.h"
+#include "./attachments/bubble.h"
 
 #include <vector>
 using namespace std;
@@ -33,6 +34,11 @@ public:
 	void addIllust(Image img) {
 		normPage();
 		pages[activePage].addIllust(img);
+	}
+
+	void addBubble(Bubble bubble) {
+		normPage();
+		pages[activePage].addBubble(bubble);
 	}
 
 	void update() {

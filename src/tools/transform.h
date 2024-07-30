@@ -14,7 +14,8 @@ private:
 	int controlOutline = 2;
 
 	Point previousMouse;
-	Illust *workIllust = NULL;
+	Attachment *workAttachment = NULL;
+	float workRatio = 1.0;
 	Point anchorPoint;
 	Point transPoint;
 	bool hasAnchor = false;
@@ -37,8 +38,8 @@ public:
 		if (input->isPressed(InputManager::Mouse, MOUSE_BUTTON_LEFT, true)) {
 			Point mouse = {input->getMouseX(true), input->getMouseY(true)};
 
-			if (workIllust) {
-				Bound bound = workIllust->getBound();
+			if (workAttachment) {
+				Bound bound = workAttachment->getBound();
 				Point pnt[4];
 				pnt[0] = {bound.x, bound.y};
 				pnt[1] = {bound.x, bound.y + bound.h};
@@ -62,15 +63,16 @@ public:
 					return true;
 				}
 				else {
-					workIllust = NULL;
+					reset();
 					return true;
 				}
 			}
 			else {
-				for (Illust *illust: page->getIllusts()) {
-					Bound bound = illust->getBound();
+				for (Attachment *attachment: page->getAttachments()) {
+					Bound bound = attachment->getBound();
 					if (Bound::inside(bound, mouse)) {
-						workIllust = illust;
+						workAttachment = attachment;
+						workRatio = workAttachment->getAspectRatio();
 						previousMouse = mouse;
 						return true;
 					}
@@ -78,48 +80,51 @@ public:
 			}
 		}
 
-		if (workIllust && input->isReleased(InputManager::Mouse, MOUSE_BUTTON_LEFT, true)) {
+		if (workAttachment && input->isReleased(InputManager::Mouse, MOUSE_BUTTON_LEFT, true)) {
+			// if (hasAnchor) hasAnchor = false;
 			// reset();
-			// return true;
+			return true;
 		}
 
-		if (workIllust && input->isDown(InputManager::Mouse, MOUSE_BUTTON_LEFT)) {
+		if (workAttachment && input->isDown(InputManager::Mouse, MOUSE_BUTTON_LEFT)) {
+			bool maintainAspect = input->isOn(InputManager::Modifier::Shift);
 			Point mouse = {input->getMouseX(true), input->getMouseY(true)};
 			int dx = mouse.x - previousMouse.x;
 			int dy = mouse.y - previousMouse.y;
-			int ox = workIllust->getX();
-			int oy = workIllust->getY();
+			int ox = workAttachment->getX();
+			int oy = workAttachment->getY();
 			if (hasAnchor == false) { //Not control point
-				workIllust->setX(ox + dx);
-				workIllust->setY(oy + dy);
+				workAttachment->setX(ox + dx);
+				workAttachment->setY(oy + dy);
 			}
 			else {
 				transPoint.x += dx; 
 				transPoint.y += dy;
 
-				int ow = workIllust->getW();
-				int oh = workIllust->getH();
-				float ratio =  ow / (float)oh;
+				int ow = workAttachment->getW();
+				int oh = workAttachment->getH();
+				float ratio = workRatio;
 
 				int nw = abs(anchorPoint.x - transPoint.x);
 				int nh = abs(anchorPoint.y - transPoint.y);
 
-				if (nh * ratio <= nw)
-					nw = nh * ratio;
-				else if (nw / ratio <= nh)
-					nh = nw / ratio;
-
-				float scale = nw / (float)ow;
+				if (maintainAspect) {
+					if (nh * ratio <= nw)
+						nw = nh * ratio;
+					else if (nw / ratio <= nh)
+						nh = nw / ratio;
+				}
 
 				if (anchorPoint.x >= transPoint.x) {
-					workIllust->setX(anchorPoint.x - nw);
+					workAttachment->setX(anchorPoint.x - nw);
 				}
 
 				if (anchorPoint.y >= transPoint.y) {
-					workIllust->setY(anchorPoint.y - nh);
+					workAttachment->setY(anchorPoint.y - nh);
 				}
 
-				workIllust->setScale(scale);
+				workAttachment->setW(nw);
+				workAttachment->setH(nh);
 			}
 			previousMouse = mouse;
 			return true;
@@ -136,7 +141,9 @@ public:
 	}
 
 	void reset() {
-		workIllust = NULL;
+		workAttachment = NULL;
+		workRatio = 1.0;
+		hasAnchor = false;
 	}
 
 	void update() {
@@ -166,12 +173,12 @@ public:
 	}
 
 	void draw() {
-		if (!workIllust) return;
+		if (!workAttachment) return;
 
 		const int size = controlSize;
 		const int line = controlOutline;
 
-		Bound bound = workIllust->getBound();
+		Bound bound = workAttachment->getBound();
 		Point pnt[4];
 		pnt[0] = {bound.x, bound.y};
 		pnt[1] = {bound.x, bound.y + bound.h};

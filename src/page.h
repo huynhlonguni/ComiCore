@@ -6,7 +6,9 @@
 #include "raylib.h"
 #include "rlgl.h"
 #include "raymath.h"
-#include "illust.h"
+#include "attachments/attachment.h"
+#include "attachments/illust.h"
+#include "attachments/bubble.h"
 
 #include <vector>
 #include <iostream>
@@ -15,7 +17,7 @@ using namespace std;
 class Page {
 private:
 	vector<Panel> panels;
-	vector<Illust*> illusts;
+	vector<Attachment*> attachments;
 	int width = 0;
 	int height = 0;
 
@@ -46,7 +48,7 @@ public:
 	void draw() {
 		DrawRectangle(0, 0, width, height, WHITE);
 		
-		vector<char> drawFlags(illusts.size(), 0);
+		vector<char> drawFlags(attachments.size(), 0);
 
 		for (int i = 0; i < panels.size(); i++) {
 			rlDrawRenderBatchActive();
@@ -66,11 +68,11 @@ public:
 			//Test stencil
 			rlStencilFunc(RL_EQUAL, 1, 0xFF);
 			rlStencilOp(RL_KEEP, RL_KEEP, RL_KEEP);
-			for (int j = 0; j < illusts.size(); j++) {
-				if (illusts[j]->getParentPanel() == i) {
+			for (int j = 0; j < attachments.size(); j++) {
+				if (attachments[j]->getParentPanel() == i) {
 					drawFlags[j] = true;
 					doDraw = true;
-					illusts[j]->draw();
+					attachments[j]->draw();
 				}
 			}
 
@@ -83,20 +85,20 @@ public:
 
 		}
 
-		for (int k = 0; k < illusts.size(); k++) {
-			if (!drawFlags[k]) illusts[k]->draw();
+		for (int k = 0; k < attachments.size(); k++) {
+			if (!drawFlags[k]) attachments[k]->draw();
 		}
 	}
 
 	void slice(Paths sliceLines) {
 		vector<Panel> res;
 
-		vector<vector<Illust*>> panelIllust(panels.size());
+		vector<vector<Attachment*>> panelAttachments(panels.size());
 
 		for (int i = 0; i < panels.size(); i++) {
-			for (int j = 0; j < illusts.size(); j++) {
-				if (illusts[j]->getParentPanel() == i)
-					panelIllust[i].push_back(illusts[j]);
+			for (int j = 0; j < attachments.size(); j++) {
+				if (attachments[j]->getParentPanel() == i)
+					panelAttachments[i].push_back(attachments[j]);
 			}
 		}
 
@@ -122,19 +124,19 @@ public:
 				count++;
 			}
 
-			for (int k = 0; k < panelIllust[i].size(); k++) {
+			for (int k = 0; k < panelAttachments[i].size(); k++) {
 				double prevArea = 0;
 				for (int j = res.size() - count; j < res.size(); j++) {
 					double area = 0;
-					Bound illustBound = panelIllust[i][k]->getBound();
-					Rect illustRect = Bound::getRectFromBound(illustBound);
-					Paths sol = Clipper::RectClip(illustRect, res[j].getPaths());
+					Bound attachmentBound = panelAttachments[i][k]->getBound();
+					Rect attachmentRect = Bound::getRectFromBound(attachmentBound);
+					Paths sol = Clipper::RectClip(attachmentRect, res[j].getPaths());
 					for (const Path &p: sol)
 						area += Clipper::Area(p);
 
 					if (area >= prevArea) {
 						prevArea = area;
-						panelIllust[i][k]->setParentPanel(j);
+						panelAttachments[i][k]->setParentPanel(j);
 					}
 				}
 			}
@@ -144,15 +146,19 @@ public:
 	}
 
 	void addIllust(Image img) {
-		illusts.push_back(new Illust(img));
+		attachments.push_back(new Illust(img));
 	}
 
-	vector<Illust*> getIllusts() {
-		return illusts;
+	void addBubble(Bubble bubble) {
+		attachments.push_back(new Bubble(bubble));
+	}
+
+	vector<Attachment*> getAttachments() {
+		return attachments;
 	}
 
 	~Page() {
-		for (int i = 0; i < illusts.size(); i++)
-			delete illusts[i];
+		for (int i = 0; i < attachments.size(); i++)
+			delete attachments[i];
 	}
 };

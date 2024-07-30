@@ -34,6 +34,9 @@ public:
 			if (nk_button_label(ctx, "Transform")) {
 				activeTool = 2;
 			}
+			if (nk_button_label(ctx, "Bubble")) {
+				activeTool = 3;
+			}
 		}
 		nk_end(ctx);
 	}
