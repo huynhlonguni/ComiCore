@@ -3,8 +3,13 @@
 #include "comic.h"
 #include "tools/tool.h"
 #include "tools/slice.h"
-#include "ui.h"
+#include "tools/panel.h"
+#include "tools/transform.h"
 #include "input_manager.h"
+
+#ifndef __EMSCRIPTEN__
+	#include "ui.h"
+#endif
 
 #include <vector>
 using namespace std;
@@ -13,10 +18,11 @@ class Editor {
 private:
 	Comic comic;
 	vector<Tool*> tools;
-	SliceTool sliceTool;
+	int activeTool = -1;
 
+#ifndef __EMSCRIPTEN__
 	UI ui;
-	const bool usesUI = true;
+#endif
 
 	Camera2D camera = {.zoom = 1};
 	float zoomStops = 0.0;
@@ -68,7 +74,18 @@ private:
 	}
 public:
 	Editor() : ui(20) {
-		sliceTool.setTarget(&comic);
+		tools.push_back(new SliceTool());
+		tools.push_back(new PanelTool());
+		tools.push_back(new TransformTool());
+
+		for (int i = 0; i < tools.size(); i++)
+			tools[i]->setTarget(&comic);
+	}
+
+	void addIllust(char *path) {
+		Image img = LoadImage(path);
+		comic.addIllust(img);
+		UnloadImage(img);
 	}
 
 	void update() {
@@ -76,25 +93,39 @@ public:
 		int wheel = handleWheel();
 		int gestures = handleGestures();
 
-		sliceTool.handleInput(&input);
-		sliceTool.update();
+		if (activeTool > -1 && activeTool < tools.size()) {
+			tools[activeTool]->handleInput(&input);
+			tools[activeTool]->update();
+		}
 
-		if (usesUI)
-			ui.update();
+#ifndef __EMSCRIPTEN__
+			ui.update(activeTool);
+#endif
 
 		comic.update();
+	}
+
+	void setActiveTool(int id) {
+		activeTool = id;
 	}
 
 	void draw() {
 		BeginMode2D(camera);
 			comic.draw();
 
-			sliceTool.draw();
+			if (activeTool > -1 && activeTool < tools.size()) {
+				tools[activeTool]->draw();
+			}
 		EndMode2D();
 
-		if (usesUI)
+#ifndef __EMSCRIPTEN__
 			ui.draw();
+#endif
+	}
 
+	~Editor() {
+		for (int i = 0; i < tools.size(); i++)
+			delete tools[i];
 	}
 
 };

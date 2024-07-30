@@ -16,20 +16,23 @@ public:
 		return ctx;
 	}
 
-	void update() {
+	void update(int &activeTool) {
 		UpdateNuklear(ctx);
 
 		if (nk_begin(ctx, "Nuklear", nk_rect(0, 0, 300, 720), 0)) {
 			nk_layout_row_dynamic(ctx, 50, 0);
 			nk_layout_row_dynamic(ctx, 50, 3);
-			if (nk_button_label(ctx, "Move")) {
-				// Button was clicked!
+			if (nk_button_label(ctx, "None")) {
+				activeTool = -1;
 			}
 			if (nk_button_label(ctx, "Slice")) {
-				// Button was clicked!
+				activeTool = 0;
 			}
-			if (nk_button_label(ctx, "Join")) {
-				// Button was clicked!
+			if (nk_button_label(ctx, "Panel")) {
+				activeTool = 1;
+			}
+			if (nk_button_label(ctx, "Transform")) {
+				activeTool = 2;
 			}
 		}
 		nk_end(ctx);

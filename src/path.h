@@ -7,6 +7,7 @@ namespace Clipper = Clipper2Lib;
 typedef Clipper::Point64 Point;
 typedef Clipper::Path64 Path;
 typedef Clipper::Paths64 Paths;
+typedef Clipper::Rect64 Rect;
 
 #include "raylib.h"
 

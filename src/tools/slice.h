@@ -36,8 +36,22 @@ public:
 	bool handleInput(InputManager *input) {
 		bool res = false;
 
+		//Cancel on escape
 		if (input->isPressed(InputManager::Keyboard, KEY_ESCAPE, true)) {
 			reset();
+			return true;
+		}
+
+		//Backtrack on backspace
+		if (input->isPressed(InputManager::Keyboard, KEY_BACKSPACE, true)) {
+			if (!started(1)) {
+				reset();
+				return true;
+			}
+
+			Point tmpPoint = sliceLines[0].back();
+			sliceLines[0].pop_back();
+			sliceLines[0].back() = tmpPoint;
 			return true;
 		}
 

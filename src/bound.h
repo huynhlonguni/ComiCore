@@ -59,4 +59,9 @@ public:
 
 		return true;
 	}
+
+	static bool inside(Bound bound, Point p) {
+		return p.x >= bound.x && p.x <= bound.x + bound.w
+			&& p.y >= bound.y && p.y <= bound.y + bound.h;
+	}
 };

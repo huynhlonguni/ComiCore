@@ -11,6 +11,16 @@ Editor editor;
 void UpdateFrame() {
 	editor.update();
 
+	if (IsFileDropped()) {
+		FilePathList dropList = LoadDroppedFiles();
+		for (int i = 0; i < dropList.count; i++) {
+			if (IsFileExtension(dropList.paths[i], ".png") || IsFileExtension(dropList.paths[i], ".jpg")) {
+				editor.addIllust(dropList.paths[i]);
+			}
+		}
+		UnloadDroppedFiles(dropList);
+	}
+
 	BeginDrawing();
 		ClearBackground(GRAY);
 		editor.draw();
@@ -22,7 +32,7 @@ void UpdateFrame() {
 int main() {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
 	SetTargetFPS(60);
-	InitWindow(1280, 720, "raylib-nuklear example");
+	InitWindow(1280, 720, "ComicGen");
 	SetExitKey(0);
 
 #ifdef __EMSCRIPTEN__

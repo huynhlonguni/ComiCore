@@ -5,6 +5,7 @@
 #include "bound.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "illust.h"
 
 #include <vector>
 #include <iostream>
@@ -13,6 +14,7 @@ using namespace std;
 class Page {
 private:
 	vector<Panel> panels;
+	vector<Illust*> illusts;
 	int width = 0;
 	int height = 0;
 
@@ -33,14 +35,30 @@ public:
 		panels.push_back(getDefaultPanelPaths(width, height));
 	}
 
+	vector<Panel>& getPanels() {
+		return panels;
+	}
+
 	void update() {
 	}
 
 	void draw() {
 		DrawRectangle(0, 0, width, height, WHITE);
 
+		vector<char> drawFlags(illusts.size(), 0);
+
 		for (int i = 0; i < panels.size(); i++) {
 			panels[i].draw();
+			for (int j = 0; j < illusts.size(); j++) {
+				if (illusts[j]->getParentPanel() == i) {
+					drawFlags[j] = true;
+					illusts[j]->draw();
+				}
+			}
+		}
+
+		for (int k = 0; k < illusts.size(); k++) {
+			if (!drawFlags[k]) illusts[k]->draw();
 		}
 	}
 
@@ -68,5 +86,18 @@ public:
 		}
 
 		panels = res;
+	}
+
+	void addIllust(Image img) {
+		illusts.push_back(new Illust(img));
+	}
+
+	vector<Illust*> getIllusts() {
+		return illusts;
+	}
+
+	~Page() {
+		for (int i = 0; i < illusts.size(); i++)
+			delete illusts[i];
 	}
 };

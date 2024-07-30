@@ -38,6 +38,7 @@ private:
 	Path vertices;
 public:
 	void triangulate() {
+		vertices.clear();
 		triangles = mapbox::earcut<unsigned short>(paths);
 		for (const Path &p: paths)
 			vertices.insert(vertices.end(), p.begin(), p.end());
@@ -56,7 +57,7 @@ public:
 		return bound;
 	}
 
-	Paths getPaths() {
+	Paths& getPaths() {
 		return paths;
 	}
 
