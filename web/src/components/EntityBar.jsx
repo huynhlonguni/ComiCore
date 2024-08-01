@@ -6,7 +6,7 @@ const EntityBar = () => {
 	const numAttachment = useSyncExternalStore(subscribe, getAttachmentCount);
 	console.log(numAttachment);
 	return(
-		<div className="w-96 h-full bg-zinc-800 border border-zinc-700">
+		<div className="w-96 h-full bg-zinc-800 border border-zinc-700 overflow-x-auto min-h-0 ">
 			{
 				[...Array(numAttachment)].map((e, i) => {
 					const type = window.editor?._EditorGetAttachmentType(i);
