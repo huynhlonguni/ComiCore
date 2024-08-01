@@ -24,8 +24,6 @@ public:
 	bool handleInput(InputManager *input) {
 		if (!comic) return false;
 
-		Page *page = comic->getActivePage();
-
 		if (input->isPressed(InputManager::Keyboard, KEY_ESCAPE, true)) {
 			reset();
 			return true;
@@ -100,10 +98,10 @@ public:
 
 		Bound bound = text.getBound();
 		Vector2 pnt[4];
-		pnt[0] = {bound.x, bound.y};
-		pnt[1] = {bound.x, bound.y + bound.h};
-		pnt[2] = {bound.x + bound.w, bound.y + bound.h};
-		pnt[3] = {bound.x + bound.w, bound.y};
+		pnt[0] = {(float)bound.x, (float)bound.y};
+		pnt[1] = {(float)bound.x, (float)bound.y + bound.h};
+		pnt[2] = {(float)bound.x + bound.w, (float)bound.y + bound.h};
+		pnt[3] = {(float)bound.x + bound.w, (float)bound.y};
 
 		for (int i = 0; i < 4 - 1; i++)
 			DrawLineV(pnt[i], pnt[i + 1], BLACK);

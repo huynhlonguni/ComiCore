@@ -26,6 +26,10 @@ extern "C" { //name mangling
 		return editor.getAttachmentCount();
 	}
 
+	EMSCRIPTEN_KEEPALIVE int EditorGetPanelCount() {
+		return editor.getPanelCount();
+	}
+
 	EMSCRIPTEN_KEEPALIVE int EditorGetAttachmentPanel(int id) {
 		return editor.getAttachmentPanel(id);
 	}
@@ -38,11 +42,25 @@ extern "C" { //name mangling
 		return editor.setAttachmentPanel(id, panel);
 	}
 }
+
+EM_JS(void, sendStateChangeEvent, (), {
+	window.dispatchEvent(
+		new CustomEvent("EditorStateChangeEvent")
+	);
+});
+#else
+void sendStateChangeEvent() {}
 #endif
 
+int prevAttachmentCount = 0;
 
 void UpdateFrame() {
 	editor.update();
+
+	int currAttachmentCount = editor.getAttachmentCount();
+	if (currAttachmentCount != prevAttachmentCount) {
+		sendStateChangeEvent();
+	}
 
 	if (IsFileDropped()) {
 		FilePathList dropList = LoadDroppedFiles();

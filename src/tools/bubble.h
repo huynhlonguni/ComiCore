@@ -27,8 +27,6 @@ public:
 	bool handleInput(InputManager *input) {
 		if (!comic) return false;
 
-		Page *page = comic->getActivePage();
-
 		if (input->isPressed(InputManager::Keyboard, KEY_ESCAPE, true)) {
 			reset();
 			return true;

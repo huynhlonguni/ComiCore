@@ -100,9 +100,7 @@ public:
 			else {
 				transPoint.x += dx; 
 				transPoint.y += dy;
-
-				int ow = workAttachment->getW();
-				int oh = workAttachment->getH();
+				
 				float ratio = workRatio;
 
 				int nw = abs(anchorPoint.x - transPoint.x);

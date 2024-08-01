@@ -162,18 +162,24 @@ public:
 		return attachments.size();
 	}
 
+	int getPanelCount() {
+		return panels.size();
+	}
+
 	int getAttachmentPanel(int id) {
-		if (id >= 0 && id <= attachments.size())
+		if (id >= 0 && id < attachments.size())
 			return attachments[id]->getParentPanel();
+		return -1;
 	}
 
 	int getAttachmentType(int id) {
-		if (id >= 0 && id <= attachments.size())
+		if (id >= 0 && id < attachments.size())
 			return attachments[id]->getType();
+		return -1;
 	}
 
 	void setAttachmentPanel(int id, int panel) {
-		if (id >= 0 && id <= attachments.size())
+		if (id >= 0 && id < attachments.size())
 			return attachments[id]->setParentPanel(panel);
 	}
 

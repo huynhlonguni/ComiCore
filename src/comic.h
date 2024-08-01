@@ -45,14 +45,19 @@ public:
 		return pages[activePage].getAttachmentCount();
 	}
 
+	int getPanelCount() {
+		normPage();
+		return pages[activePage].getPanelCount();
+	}
+
 	int getAttachmentPanel(int id) {
 		normPage();
-		pages[activePage].getAttachmentPanel(id);
+		return pages[activePage].getAttachmentPanel(id);
 	}
 
 	int getAttachmentType(int id) {
 		normPage();
-		pages[activePage].getAttachmentType(id);
+		return pages[activePage].getAttachmentType(id);
 	}
 
 	void setAttachmentPanel(int id, int panel) {

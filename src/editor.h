@@ -109,6 +109,10 @@ public:
 		return comic.getAttachmentCount();
 	}
 
+	int getPanelCount() {
+		return comic.getPanelCount();
+	}
+
 	int getAttachmentPanel(int id) {
 		return comic.getAttachmentPanel(id);
 	}
