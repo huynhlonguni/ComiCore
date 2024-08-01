@@ -1,6 +1,6 @@
-/* eslint no-restricted-globals: 0 */ 
-/* eslint no-unused-expressions: 0 */ 
-/* eslint no-undef: 0 */ 
+/* eslint no-restricted-globals: 0 */
+/* eslint no-undef: 0 */
+/* eslint no-unused-expressions: 0 */
 
 var Module = (() => {
   var _scriptName = import.meta.url;

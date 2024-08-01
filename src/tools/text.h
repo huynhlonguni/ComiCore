@@ -98,16 +98,16 @@ public:
 		// const int size = controlSize;
 		// const int line = controlOutline;
 
-		// Bound bound = text.getBound();
-		// Point pnt[4];
-		// pnt[0] = {bound.x, bound.y};
-		// pnt[1] = {bound.x, bound.y + bound.h};
-		// pnt[2] = {bound.x + bound.w, bound.y + bound.h};
-		// pnt[3] = {bound.x + bound.w, bound.y};
+		Bound bound = text.getBound();
+		Vector2 pnt[4];
+		pnt[0] = {bound.x, bound.y};
+		pnt[1] = {bound.x, bound.y + bound.h};
+		pnt[2] = {bound.x + bound.w, bound.y + bound.h};
+		pnt[3] = {bound.x + bound.w, bound.y};
 
-		// for (int i = 0; i < 4 - 1; i++)
-		// 	drawDashedLine(pnt[i], pnt[i + 1], BLACK);
-		// drawDashedLine(pnt[3], pnt[0]);
+		for (int i = 0; i < 4 - 1; i++)
+			DrawLineV(pnt[i], pnt[i + 1], BLACK);
+		DrawLineV(pnt[3], pnt[0], BLACK);
 
 		// for (int i = 0; i < 4; i++) {
 		// 	DrawRectangle(pnt[i].x - size / 2, pnt[i].y - size / 2, size, size, BLACK);
