@@ -1,6 +1,11 @@
-# Building
+# Manga Maker application
+Compiled raylib application to WebAssembly via Emscripten. UI made in React. WIP
 
-## Windows
+## Screenshot
+![Screenshot](Screenshot.png)
+
+## Building
+### Windows
 ```
 make
 ```
